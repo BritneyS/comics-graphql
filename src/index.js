@@ -46,6 +46,18 @@ const resolvers = {
         fullName: (character) => {
             return character.biography.fullName;
         },
+        placeOfBirth: (character) => {
+            return character.biography.placeOfBirth;
+        },
+        firstAppearance: (character) => {
+            return character.biography.firstAppearance;
+        },
+        publisher: (character) => {
+            return character.biography.publisher;
+        },
+        alignment: (character) => {
+            return character.biography.alignment;
+        },
         images: (character) => {
             return character.images;
         }

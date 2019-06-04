@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 import fetch from 'node-fetch';
+import { find } from 'lodash';
 
 const app = express();
 const ENV_PORT = process.env.ENV_PORT;
@@ -30,13 +31,20 @@ const schema = gql`
 
     type Query {
         characters: [Character]
+        character(id: Int!): Character
     }
 `;
+
 const resolvers = {
     Query: {
         characters: async () => {
             return fetch(allCharactersEndpoint)
             .then(res => res.json());
+        },
+        character: async (_, { id }) => {
+            return fetch(allCharactersEndpoint)
+            .then(res => res.json())
+            .then(characters => find(characters, { "id": id }));
         }
     },
     Character: {

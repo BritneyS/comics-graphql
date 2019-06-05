@@ -4,6 +4,7 @@ import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 import fetch from 'node-fetch';
 import { find } from 'lodash';
+import { data } from './data.js';
 
 const app = express();
 const ENV_PORT = process.env.ENV_PORT;
@@ -34,16 +35,22 @@ const schema = gql`
         character(id: Int!): Character
     }
 `;
-
+function getData (res) {
+    if (res.status >= 200 && res.status < 300) {
+        return res.json();
+    } else {
+        return data;
+    }
+}
 const resolvers = {
     Query: {
         characters: async () => {
             return fetch(allCharactersEndpoint)
-            .then(res => res.json());
+            .then(getData);
         },
         character: async (_, { id }) => {
             return fetch(allCharactersEndpoint)
-            .then(res => res.json())
+            .then(getData)
             .then(characters => find(characters, { "id": id }));
         }
     },
